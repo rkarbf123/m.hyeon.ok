@@ -1,13 +1,3 @@
-PDF 파일을 이 폴더 또는 하위 폴더에 넣으세요.
-
-파일명 앞에 다음 중 하나를 붙이면 자동 분류됩니다.
-- 문제집
-- 실모
-- N제
-
-예:
-문제집 수학 개념.pdf
-실모 2027 실전모의고사 1회.pdf
-N제 미적분 N제.pdf
-
-하위 폴더 이름으로도 분류할 수 있습니다.
+& "C:\Program Files\Git\cmd\git.exe" add .
+& "C:\Program Files\Git\cmd\git.exe" commit -m "update files"
+& "C:\Program Files\Git\cmd\git.exe" push
