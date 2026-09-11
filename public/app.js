@@ -70,8 +70,8 @@ function render() {
           <div class="material-meta">PDF</div>
         </div>
         <div class="material-actions">
-          <a class="action" href="${encodeURI(item.url)}" target="_blank" rel="noopener">보기</a>
-          <a class="action download" href="${encodeURI(item.url)}" download>다운로드</a>
+          <a class="action" href="${item.url}"" target="_blank" rel="noopener">보기</a>
+          <a class="action download" href="${item.url}"" download>다운로드</a>
         </div>
       </article>
     `).join("");
