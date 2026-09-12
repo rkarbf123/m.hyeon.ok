@@ -1,4 +1,4 @@
-const PER_PAGE = 20;
+const PER_PAGE = 10;
 
 const state = {
   category: "문제집",
