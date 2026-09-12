@@ -46,10 +46,9 @@ for path in sorted(MATERIALS.rglob("*.pdf"), key=lambda p: p.as_posix().lower())
     items.append({
         "name": clean_name(path),
         "category": category,
-        "url": "/" + "/".join(quote(part) for part in relative.split("/")),
+        "url": "materials/" + "/".join(quote(part) for part in relative.split("/")),
     })
 
-# 같은 이름/경로가 중복으로 들어가는 것을 방지
 seen = set()
 unique_items = []
 for item in items:
