@@ -104,8 +104,31 @@ button { color: inherit; }
   padding: 0 24px 0 8px;
 }
 
+.request-btn {
+  flex: 0 0 auto;
+  height: 44px;
+  margin-left: 8px;
+  padding: 0 15px;
+  border: 1px solid #ccd3df;
+  border-radius: 10px;
+  background: #fff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .16s ease, border-color .16s ease, color .16s ease;
+}
+
+.request-btn:hover {
+  background: #f0f4fa;
+  border-color: #aeb8c8;
+  color: #0755b8;
+}
+
 .search-box {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   height: 44px;
   display: flex;
   align-items: center;
