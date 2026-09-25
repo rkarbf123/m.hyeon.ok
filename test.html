@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>고교 성적 분석 시뮬레이터</title>
+  <!-- 차트 생성을 위한 Chart.js 라이브러리 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary-color: #4F46E5;
+      --bg-color: #F3F4F6;
+      --card-bg: #FFFFFF;
+      --text-main: #1F2937;
+      --text-muted: #6B7280;
+    }
+    
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--primary-color);
+    }
+
+    .dashboard-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      border-bottom: 2px solid var(--bg-color);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+
+    /* 폼 스타일 */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+
+    button.submit-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 10px;
+    }
+
+    button.submit-btn:hover {
+      background-color: #4338CA;
+    }
+
+    /* 통계 요약 박스 */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .summary-box {
+      background: #EEF2FF;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .summary-box p {
+      margin: 0 0 8px 0;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .summary-box h3 {
+      margin: 0;
+      color: var(--primary-color);
+      font-size: 2rem;
+    }
+
+    /* 테이블 스타일 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    th {
+      background-color: #F9FAFB;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .delete-btn {
+      padding: 6px 12px;
+      background-color: #EF4444;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+
+    .delete-btn:hover {
+      background-color: #DC2626;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📊 고교 성적 분석 시뮬레이터</h1>
+
+  <div class="dashboard-container">
+    
+    <!-- 왼쪽: 성적 입력 패널 -->
+    <div class="card">
+      <h2>성적 입력</h2>
+      <form id="scoreForm">
+        <div class="form-group">
+          <label for="subject">과목</label>
+          <select id="subject" required>
+            <option value="국어">국어</option>
+            <option value="수학">수학</option>
+            <option value="영어">영어</option>
+            <option value="탐구(과목1)">탐구(과목1)</option>
+            <option value="탐구(과목2)">탐구(과목2)</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="score">원점수 (0웹 브라우저에서 바로 실행할 수 있는 **'성적 분석 시뮬레이터'**의 프론트엔드 기본 코드입니다. HTML, CSS, JavaScript를 하나의 파일로 구성하여 구조를 쉽게 파악할 수 있도록 작성했습니다.
+
+아래 코드를 복사하여 `index.html` 파일로 저장한 뒤, 웹 브라우저로 열면 바로 작동합니다.
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성적 분석 시뮬레이터</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; color: #333; margin: 0; padding: 40px 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; }
+        
+        .tabs { display: flex; border-bottom: 2px solid #e9ecef; margin-bottom: 20px; }
+        .tab { flex: 1; text-align: center; padding: 15px; cursor: pointer; font-weight: bold; color: #adb5bd; transition: 0.3s; }
+        .tab.active { color: #4361ee; border-bottom: 3px solid #4361ee; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 12px; border: 1px solid #dee2e6; text-align: center; }
+        th { background-color: #f8f9fa; font-weight: 600; }
+        input { width: 90%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; text-align: center; font-size: 14px; }
+        
+        .btn-group { display: flex; justify-content: space-between; margin-bottom: 30px; }
+        button { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-add { background-color: #e9ecef; color: #495057; }
+        .btn-add:hover { background-color: #dee2e6; }
+        .btn-calc { background-color: #4361ee; color: white; }
+        .btn-calc:hover { background-color: #3a56d4; }
+        
+        .result-box { background-color: #f0f4ff; padding: 25px; border-radius: 8px; text-align: center; border: 1px solid #dce4ff; }
+        .result-title { font-size: 1.1em; color: #495057; margin-bottom: 10px; }
+        .result-value { font-size: 2em; font-weight: bold; color: #4361ee; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 성적 분석 시뮬레이터</h1>
+    
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('school')">내신 성적 분석</div>
+        <div class="tab" onclick="switchTab('mock')">모의고사 분석</div>
+    </div>
+
+    <!-- 내신 성적 탭 -->
+    <div id="school" class="tab-content active">
+        <table id="schoolTable">
+            <thead>
+                <tr>
+                    <th>과목명</th>
+                    <th>단위수(시수)</th>
+                    <th>원점수</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" value="국어"></td>
+                    <td><input type="number" class="credit" value="4" min="1"></td>
+                    <td><input type="number" class="score" value="85" min="0" max="100"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" value="수학"></td>
+                    <td><input type="number" class="credit" value="4" min="1"></td>
+                    <td><input type="number" class="score" value="92" min="0" max="100"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" value="영어"></td>
+                    <td><input type="number" class="credit" value="4" min="1"></td>
+                    <td><input type="number" class="score" value="78" min="0" max="100"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="btn-group">
+            <button class="btn-add" onclick="addRow('schoolTable')">+ 과목 추가</button>
+            <button class="btn-calc" onclick="calculateSchool()">분석하기</button>
+        </div>
+        
+        <div class="result-box">
+            <div class="result-title">단위수를 반영한 예상 가중 평균</div>
+            <div class="result-value" id="schoolResult">- 점</div>
+        </div>
+    </div>
+
+    <!-- 모의고사 탭 -->
+    <div id="mock" class="tab-content">
+        <table id="mockTable">
+            <thead>
+                <tr>
+                    <th>과목명</th>
+                    <th>원점수</th>
+                    <th>표준점수 (선택)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" value="국어"></td>
+                    <td><input type="number" class="m-score" value="88" min="0" max="100"></td>
+                    <td><input type="number" value="125"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" value="수학"></td>
+                    <td><input type="number" class="m-score" value="96" min="0" max="100"></td>
+                    <td><input type="number" value="138"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" value="탐구1"></td>
+                    <td><input type="number" class="m-score" value="45" min="0" max="50"></td>
+                    <td><input type="number" value="62"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="btn-group">
+            <button class="btn-add" onclick="addRow('mockTable')">+ 과목 추가</button>
+            <button class="btn-calc" onclick="calculateMock()">분석하기</button>
+        </div>
+        
+        <div class="result-box">
+            <div class="result-title">원점수 총점</div>
+            <div class="result-value" id="mockResult">- 점</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 탭 전환 로직
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        event.target.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    // 행 추가 로직
+    function addRow(tableId) {
+        const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+        
+        if (tableId === 'schoolTable') {
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="과목명"></td>
+                <td><input type="number" class="credit" value="3" min="1"></td>
+                <td><input type="number" class="score" placeholder="점수" min="0" max="100"></td>
+            `;
+        } else {
+            newRow.innerHTML = `
+                <td><input type="text" placeholder="과목명"></td>
+                <td><input type="number" class="m-score" placeholder="원점수" min="0" max="100"></td>
+                <td><input type="number" placeholder="표준점수"></td>
+            `;
+        }
+    }
+
+    // 내신 계산 (가중 평균 = ∑(점수 * 단위수) / ∑단위수)
+    function calculateSchool() {
+        const rows = document.getElementById('schoolTable').getElementsByTagName('tbody')[0].rows;
+        let totalCredit = 0;
+        let totalScoreProduct = 0;
+
+        for (let i = 0; i < rows.length; i++) {
+            const credit = parseFloat(rows[i].querySelector('.credit').value) || 0;
+            const score = parseFloat(rows[i].querySelector('.score').value) || 0;
+            
+            totalCredit += credit;
+            totalScoreProduct += (credit * score);
+        }
+
+        const average = totalCredit === 0 ? 0 : (totalScoreProduct / totalCredit).toFixed(2);
+        document.getElementById('schoolResult').innerText = average + ' 점';
+    }
+
+    // 모의고사 계산 (원점수 단순 합산)
+    function calculateMock() {
+        const rows = document.getElementById('mockTable').getElementsByTagName('tbody')[0].rows;
+        let totalScore = 0;
+
+        for (let i = 0; i < rows.length; i++) {
+            const score = parseFloat(rows[i].querySelector('.m-score').value) || 0;
+            totalScore += score;
+        }
+
+        document.getElementById('mockResult').innerText = totalScore + ' 점';
+    }
+</script>
+
+</body>
+</html>
